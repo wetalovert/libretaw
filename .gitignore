@@ -1,0 +1,7 @@
+node_modules/
+dist/
+android/app/build/
+android/.gradle/
+server/data/
+server/backups/
+*.log
