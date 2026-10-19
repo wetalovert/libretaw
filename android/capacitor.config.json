@@ -1,0 +1,6 @@
+{
+  "appId": "org.libretaw.app",
+  "appName": "libretaw",
+  "webDir": "web",
+  "server": { "androidScheme": "https" }
+}
