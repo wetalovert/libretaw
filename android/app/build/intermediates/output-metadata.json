@@ -1,10 +1,20 @@
 {
   "version": 3,
   "artifactType": {
-    "type": "COMPATIBLE_SCREEN_MANIFEST",
+    "type": "MERGED_MANIFESTS",
     "kind": "Directory"
   },
   "applicationId": "org.libretaw.app",
   "variantName": "debug",
-  "elements": []
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 1,
+      "versionName": "1.0.0",
+      "outputFile": "AndroidManifest.xml"
+    }
+  ],
+  "elementType": "File"
 }
