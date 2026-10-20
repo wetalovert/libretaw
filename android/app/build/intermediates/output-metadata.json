@@ -1,7 +1,7 @@
 {
   "version": 3,
   "artifactType": {
-    "type": "PACKAGED_MANIFESTS",
+    "type": "PROCESSED_RES",
     "kind": "Directory"
   },
   "applicationId": "org.libretaw.app",
@@ -13,7 +13,7 @@
       "attributes": [],
       "versionCode": 1,
       "versionName": "1.0.0",
-      "outputFile": "AndroidManifest.xml"
+      "outputFile": "resources-debug.ap_"
     }
   ],
   "elementType": "File"
