@@ -1,0 +1,42 @@
+{
+  "name": "libretaw",
+  "version": "1.0.0",
+  "description": "Личный мессенджер libretaw: чаты, группы, каналы, сквозное шифрование, работа в локальной сети, через VPN и свой сервер или хостинг.",
+  "license": "GPL-3.0-only",
+  "private": true,
+  "scripts": {
+    "test": "bash scripts/run-tests.sh",
+    "server": "node server/libretaw-server.js",
+    "host": "node server/libretaw-host.js",
+    "linux:deps": "npm install",
+    "linux:build": "electron-builder --linux AppImage",
+    "android:assets": "bash scripts/sync-android-assets.sh",
+    "android:build": "bash scripts/sync-android-assets.sh && echo 'Откройте папку android/ в Android Studio и выберите Build > Build APK(s)'"
+  },
+  "build": {
+    "appId": "org.libretaw.app",
+    "productName": "libretaw",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "web/**/*",
+      "linux/main.js",
+      "package.json",
+      "icons/**/*"
+    ],
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Network;InstantMessaging",
+      "icon": "icons/linux"
+    }
+  },
+  "main": "linux/main.js",
+  "author": "libretaw contributors",
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  }
+}
