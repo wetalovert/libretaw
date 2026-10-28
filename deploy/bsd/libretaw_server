@@ -1,0 +1,26 @@
+#!/bin/sh
+# rc.d служба libretaw-сервера для FreeBSD.
+# Установка:  install -m 755 freebsd/libretaw_server /usr/local/etc/rc.d/libretaw_server
+# Настройки:  /usr/local/etc/libretaw.env (LIBRETAW_DATA_KEY, LIBRETAW_TOKEN, PORT, HOST, DATA_DIR)
+#   sysrc libretaw_server_enable=YES && service libretaw_server start
+
+# PROVIDE: libretaw_server
+# REQUIRE: NETWORKING
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name="libretaw_server"
+rcvar="libretaw_server_enable"
+load_rc_config $name
+
+: ${libretaw_server_enable:="NO"}
+: ${libretaw_server_user:="libretaw"}
+: ${libretaw_server_env:="/usr/local/etc/libretaw.env"}
+: ${libretaw_server_dir:="/usr/local/share/libretaw/server"}
+
+pidfile="/var/run/${name}.pid"
+command="/usr/sbin/daemon"
+command_args="-f -P ${pidfile} -u ${libretaw_server_user} sh -c 'set -a; . ${libretaw_server_env}; set +a; exec node ${libretaw_server_dir}/libretaw-server.js'"
+
+run_rc_command "$1"
