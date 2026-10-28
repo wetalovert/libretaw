@@ -1,0 +1,13 @@
+const fs=require('fs'),vm=require('vm');
+const src=fs.readFileSync('/tmp/main.js','utf8');
+const fn=n=>{const i=src.indexOf('function '+n+'(');let d=0,j=src.indexOf('{',i);for(let k=j;k<src.length;k++){if(src[k]==='{')d++;else if(src[k]==='}'){d--;if(d===0)return src.slice(i,k+1)}}};
+let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++;console.log('  ok  ',m)}else{fail++;console.log('  FAIL',m)}};
+const sb={};vm.createContext(sb);vm.runInContext(fn('validColor')+'\n'+fn('contrastOn'),sb);
+const V=x=>vm.runInContext(`validColor(${JSON.stringify(x)})`,sb),C=x=>vm.runInContext(`contrastOn(${JSON.stringify(x)})`,sb);
+ok(V('#FF8800')==='#ff8800','any hex colour is accepted (normalised to lower case)');
+ok(V('red')==='','named colours are refused (only #rrggbb)');
+ok(V('#ff88')===''&&V('#gg0000')==='','malformed values are refused');
+ok(V('url(x)')===''&&V('"><script>')==='','injection attempts are refused');
+ok(C('#ffffff')==='#111111'&&C('#000000')==='#ffffff','text is dark on light backgrounds and light on dark ones');
+ok(C('')==='inherit','no background: text colour is inherited');
+console.log(`\nresult: ${pass} passed, ${fail} failed`);process.exit(fail?1:0);
