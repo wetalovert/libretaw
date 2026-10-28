@@ -1,0 +1,17 @@
+const fs=require('fs');const vm=require('vm');
+const s=fs.readFileSync('/tmp/main.js','utf8');
+const fn=s.slice(s.indexOf('function persistReplacer('),s.indexOf('\n',s.indexOf('function persistReplacer('))+1);
+let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++;console.log('  ok  ',m)}else{fail++;console.log('  FAIL',m)}};
+const store={srv:{url:'wss://x.example',token:'secret',auto:true},host:{url:'h',token:'t2'},chats:[{id:'a',name:'x'}]};
+const sb={store};vm.createContext(sb);vm.runInContext(fn,sb);
+const dump=()=>vm.runInContext('JSON.stringify(store,persistReplacer)',sb);
+let j=dump();
+ok(j.includes('secret')&&j.includes('wss://x.example'),'default (not set): address and password are kept');
+store.srv.keep=true;j=dump();
+ok(j.includes('secret'),'switch on: address and password are written to the device');
+store.srv.keep=false;j=dump();
+ok(!j.includes('secret')&&!j.includes('wss://x.example'),'switch off: neither address nor password is written');
+ok(j.includes('"auto":true'),'other server settings are still saved');
+ok(j.includes('t2'),'the hosting settings are not affected by the server switch');
+const parsed=JSON.parse(j);ok(parsed.srv.url===undefined&&parsed.srv.token===undefined,'the saved record has no server secrets');
+console.log(`\nresult: ${pass} passed, ${fail} failed`);process.exit(fail?1:0);
