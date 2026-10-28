@@ -1,0 +1,18 @@
+# Динамическая настройка: куда направлять запросы для libretaw.
+# Замените chat.example.com на свой домен. Сервер libretaw слушает только 127.0.0.1:8080.
+
+http:
+  routers:
+    libretaw:
+      rule: "Host(`chat.example.com`)"
+      entryPoints:
+        - websecure
+      service: libretaw
+      tls:
+        certResolver: le
+
+  services:
+    libretaw:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:8080"

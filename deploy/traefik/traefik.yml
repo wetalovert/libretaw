@@ -1,0 +1,32 @@
+# Статическая настройка Traefik (v3). Меняется редко.
+# Замените you@example.com на свою почту: на неё Let's Encrypt пришлёт уведомления о сертификате.
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":443"
+
+certificatesResolvers:
+  le:
+    acme:
+      email: you@example.com
+      storage: /letsencrypt/acme.json
+      httpChallenge:
+        entryPoint: web
+
+providers:
+  file:
+    filename: /etc/traefik/dynamic.yml
+    watch: true
+
+api:
+  dashboard: false
+
+log:
+  level: INFO

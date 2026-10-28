@@ -1,0 +1,13 @@
+# Traefik на сетевом режиме хоста: порты 80 и 443 открываются на самом сервере,
+# а запросы уходят на libretaw по адресу 127.0.0.1:8080 (сам libretaw запускается отдельной службой).
+
+services:
+  traefik:
+    image: traefik:v3.1
+    container_name: traefik
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - ./letsencrypt:/letsencrypt
