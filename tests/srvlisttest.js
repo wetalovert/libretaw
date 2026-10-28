@@ -1,0 +1,25 @@
+const fs=require('fs');const vm=require('vm');
+const s=fs.readFileSync('/tmp/main.js','utf8');
+const block=s.slice(s.indexOf('// ===== Список сохранённых серверов ====='),s.indexOf('// ===== Polls ====='));
+const rep=s.slice(s.indexOf('function persistReplacer('),s.indexOf('\n',s.indexOf('function persistReplacer('))+1);
+let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++;console.log('  ok  ',m)}else{fail++;console.log('  FAIL',m)}};
+const els={};const $=i=>els[i]||(els[i]={value:'',style:{},classList:{toggle(){}},innerHTML:'',append(){}});
+const picks=[];
+const store={srv:{url:'wss://a.example',token:'ta',auto:true},chats:[]};
+const sb={store,$,save(){},snack(){},srvStop(){},srvConnect(){picks.push('connect')},srvMsg:'',srvTry:0,rEl:()=>({append(){},style:{}}),Math,Date,JSON,Object,Array,String};
+sb.srvCfg=()=>store.srv;vm.createContext(sb);vm.runInContext(rep+block,sb);
+const R=c=>vm.runInContext(c,sb);
+ok(R("srvList().length")===1&&R("srvList()[0].url")==='wss://a.example','the current server becomes the first list entry');
+R("srvAddCurrent('Дом')");ok(R("srvList().length")===1&&R("srvList()[0].name")==='Дом','saving the same address updates it instead of duplicating');
+store.srv.url='wss://b.example';store.srv.token='tb';R("srvAddCurrent('Работа')");
+ok(R("srvList().length")===2&&R("store.srv.cur")&&R("srvList()[1].url")==='wss://b.example','a second server is added');
+const bId=R("srvList()[1].id");
+R("srvPickNow('"+bId+"')");
+ok(store.srv.url==='wss://b.example'&&store.srv.token==='tb'&&picks.length===1,'picking a server switches to it and connects');
+R("srvDel('"+bId+"')");ok(R("srvList().length")===1,'deleting removes it from the list');
+// persistence
+let j=R("JSON.stringify(store,persistReplacer)");
+ok(j.includes('wss://a.example')&&j.includes('"list"'),'with "сохранять" on, the list is saved on the device');
+store.srv.keep=false;j=R("JSON.stringify(store,persistReplacer)");
+ok(!j.includes('wss://a.example')&&!j.includes('"list"'),'with "сохранять" off, the list and addresses are not written to the device');
+console.log(`\nresult: ${pass} passed, ${fail} failed`);process.exit(fail?1:0);
