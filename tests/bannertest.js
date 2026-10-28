@@ -1,0 +1,17 @@
+const fs=require('fs'),vm=require('vm');
+const s=fs.readFileSync('/tmp/main.js','utf8');
+const block=s.slice(s.indexOf('// ===== Надпись о шифровании в чате ====='),s.indexOf('// ===== Меню чата (три точки) ====='));
+let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++;console.log('  ok  ',m)}else{fail++;console.log('  FAIL',m)}};
+const sb={store:{pk:{}},ecPriv:null,rEl:(t,css,tx)=>({tx}) ,c:null};vm.createContext(sb);vm.runInContext(block,sb);
+const R=x=>vm.runInContext(x,sb);
+R("ecPriv=null;store.pk={}");
+ok(R("encBanner({peer:'P',msgs:[]})")===null||R("encBanner({peer:'P',msgs:[]})").tx.includes('ждём'),'personal chat without the other key shows the honest warning');
+R("ecPriv={};store.pk={P:'x'}");
+ok(R("encBanner({peer:'P'}).tx")==='🔒 Все сообщения шифруются','personal chat with keys shows the encryption banner');
+R("store.pk={}");
+ok(R("encBanner({peer:'P'}).tx").includes('ждём'),'personal chat loses the banner when the key is unknown');
+ok(R("encBanner({group:1,gk:'abc'}).tx")==='🔒 Все сообщения шифруются','group with a key shows the banner');
+ok(R("encBanner({group:1}).tx").includes('ждём'),'group without a key shows the warning');
+ok(R("encBanner({ch:1,chid:'CH'})")===null,'channels: no banner (not encrypted)');
+ok(R("encBanner({svc:1})")===null,'service chat: no banner');
+console.log(`\nresult: ${pass} passed, ${fail} failed`);process.exit(fail?1:0);
