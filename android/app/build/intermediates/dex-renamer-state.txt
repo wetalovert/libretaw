@@ -1,7 +1,0 @@
-#Mon Oct 19 22:40:07 MSK 2026
-base.0=/home/markuskit/Документы/libretaw-src/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
-base.1=/home/markuskit/Документы/libretaw-src/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/5/classes.dex
-path.0=0/classes.dex
-path.1=5/classes.dex
-renamed.0=classes.dex
-renamed.1=classes2.dex

@@ -1,7 +1,0 @@
-org.libretaw.app-pngs-0 /home/markuskit/Документы/libretaw-src/android/app/build/generated/res/pngs/debug
-org.libretaw.app-resValues-1 /home/markuskit/Документы/libretaw-src/android/app/build/generated/res/resValues/debug
-org.libretaw.app-packageDebugResources-2 /home/markuskit/Документы/libretaw-src/android/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
-org.libretaw.app-packageDebugResources-3 /home/markuskit/Документы/libretaw-src/android/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
-org.libretaw.app-debug-4 /home/markuskit/Документы/libretaw-src/android/app/build/intermediates/merged_res/debug/mergeDebugResources
-org.libretaw.app-debug-5 /home/markuskit/Документы/libretaw-src/android/app/src/debug/res
-org.libretaw.app-main-6 /home/markuskit/Документы/libretaw-src/android/app/src/main/res
